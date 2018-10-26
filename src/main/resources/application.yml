@@ -1,0 +1,54 @@
+management:
+  security:
+    enabled: false
+
+spring:
+  profiles:
+    active: provider2
+  jpa:
+    generate-ddl: false
+    show-sql: true
+    hibernate: 
+      ddl-auto: none
+  datasource:
+    platform: h2
+    schema: classpath:schema.sql
+    data: classpath:data.sql
+    #url: jdbc:mysql://127.0.0.1:3306/web_test?useUnicode=true&characterEncoding=utf-8
+    #username: root
+    #password: root
+  application:
+    name: microservice-provider-user ##注册到Eureka Server上的应用名称
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/,http://localhost:8762/eureka/ ##Eureka Server集群的地址
+  instance:
+    pre-ip-address: true ##将自己的ip注册到Eureka Server上
+
+##配置多个应用
+---
+spring:
+  profiles: provider0
+server:
+  port: 8000
+
+---
+spring:
+  profiles: provider1
+server:
+  port: 8001
+
+---
+spring:
+  profiles: provider2
+server:
+  port: 8002
+
+logging:
+  level:
+    root: INFO
+    org.hibernate: INFO
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.type.descriptor.sql.BasicExtractor: TRACE
